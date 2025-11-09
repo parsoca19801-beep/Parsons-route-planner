@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Parsons Route Planner 2.1</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <!-- MapLibre GL (OSM basemap) -->
+  <link href="https://unpkg.com/maplibre-gl@3.6.2/dist/maplibre-gl.css" rel="stylesheet" />
+  <script src="https://unpkg.com/maplibre-gl@3.6.2/dist/maplibre-gl.js"></script>
+
+  <!-- PapaParse for CSV -->
+  <script src="https://unpkg.com/papaparse@5.4.1/papaparse.min.js"></script>
+
+  <link rel="stylesheet" href="./styles.css?v=002" />
+</head>
+<body>
+  <header class="topbar">
+    <h1>Parsons Route Planner</h1>
+    <div class="brand">Republic-style</div>
+  </header>
+
+  <section class="controls">
+    <div class="row">
+      <label>Route type</label>
+      <select id="routeType">
+        <option value="commercial" selected>Commercial (30–60s)</option>
+        <option value="rolloff">Roll-off (5–10m)</option>
+      </select>
+
+      <label>Default service</label>
+      <input id="svc" type="number" min="0" value="45" /> <span>sec</span>
+
+      <label>Start time</label>
+      <input id="departAt" type="datetime-local" />
+
+      <label>Preview</label>
+      <input id="previewToggle" type="checkbox" checked />
+    </div>
+
+    <div class="row">
+      <label>Start (lat,lng)</label>
+      <input id="startLat" type="number" step="any" placeholder="36.4" />
+      <input id="startLng" type="number" step="any" placeholder="-94.2" />
+      <label>Return to start</label>
+      <input id="returnToStart" type="checkbox" checked />
+    </div>
+
+    <div class="row">
+      <label class="button filelabel" for="fileInput">Upload CSV</label>
+      <input id="fileInput" type="file" accept=".csv" />
+      <button id="optimizeBtn" class="button primary">Optimize</button>
+    </div>
+
+    <details class="help">
+      <summary>CSV format</summary>
+      <code>name,address,lat,lng,serviceSeconds,notes</code>
+      <div>Provide <em>either</em> address <em>or</em> lat/lng. If serviceSeconds is blank, we’ll use the default.</div>
+    </details>
+  </section>
+
+  <main class="layout">
+    <div id="map"></div>
+    <aside class="panel">
+      <h3>Totals</h3>
+      <div id="totals">—</div>
+
+      <h3>Stops &amp; ETAs</h3>
+      <div id="etaList" class="list"></div>
+    </aside>
+  </main>
+
+  <footer class="foot">
+    <small>© Parsons • Map data © OpenStreetMap contributors</small>
+  </footer>
+
+  <script src="./app.js?v=002"></script>
+</body>
+</html>
