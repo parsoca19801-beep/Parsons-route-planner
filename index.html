@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Parsons Route Planner</title>
+  <meta name="theme-color" content="#1877F2">
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" href="icon-192.png">
+  <link rel="stylesheet" href="style.css">
+  <meta name="description" content="Lightweight, installable route planner with manual stop control, quick optimization, and Google Maps export.">
+</head>
+<body>
+  <div class="container">
+    <div class="card">
+      <div class="h">
+        <h1>Parsons Route Planner <span class="badge">PWA</span></h1>
+        <div class="small">
+          Offline-ready · Install from your browser menu
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col">
+          <label>Stop type</label>
+          <select id="type">
+            <option value="commercial">Commercial (30–60s)</option>
+            <option value="rolloff">Roll-off (5–10m)</option>
+          </select>
+        </div>
+        <div class="col">
+          <label>Stop name (or full address)</label>
+          <input id="name" placeholder="e.g., 123 Main St or Dairy Queen">
+        </div>
+        <div class="col">
+          <label>Optional address (improves Maps export)</label>
+          <input id="address" placeholder="Street, City, State">
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col">
+          <label>Latitude (optional for Optimize)</label>
+          <input id="lat" placeholder="36.372 or leave blank">
+        </div>
+        <div class="col">
+          <label>Longitude (optional for Optimize)</label>
+          <input id="lng" placeholder="-94.207 or leave blank">
+        </div>
+        <div class="col">
+          <label>Service time</label>
+          <div class="row">
+            <div class="col">
+              <input id="svcSec" placeholder="Commercial seconds (e.g., 45)">
+            </div>
+            <div class="col">
+              <input id="svcMin" placeholder="Roll-off minutes (e.g., 7)">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row" style="margin-top:8px;">
+        <button id="add" class="primary">Add stop</button>
+        <button id="opt">Optimize (Nearest Neighbor)</button>
+        <button id="gmap">Open in Google Maps</button>
+        <button id="loc" class="ghost">Use my location</button>
+      </div>
+
+      <hr>
+
+      <div class="row">
+        <div class="col">
+          <div class="small">Route summary</div>
+          <div class="list">
+            <div>Total stops: <strong id="totalCount">0</strong></div>
+            <div>Est. drive time @ 30 km/h: <strong id="estDrive">0</strong></div>
+            <div>Est. service time: <strong id="totalSvc">0</strong></div>
+            <div>Est. distance: <strong id="estDistance">0 km</strong></div>
+            <div>Total day: <strong id="estTotal">0</strong></div>
+          </div>
+        </div>
+        <div class="col">
+          <div class="small">Defaults</div>
+          <div class="row">
+            <div class="col">
+              <label>Commercial seconds</label>
+              <input id="commercialSec" value="45">
+            </div>
+            <div class="col">
+              <label>Roll-off minutes</label>
+              <input id="rolloffMin" value="7">
+            </div>
+            <div class="col">
+              <label>Start name</label>
+              <input id="startName" value="Start (My Location)">
+            </div>
+          </div>
+          <div class="row" style="margin-top:8px;">
+            <button id="saveDefaults">Save defaults</button>
+            <div class="small">My location: <span id="myLoc">unknown</span></div>
+          </div>
+        </div>
+      </div>
+
+      <hr>
+
+      <div class="small">Drag to reorder stops</div>
+      <div id="stops" class="list"></div>
+    </div>
+
+    <footer>
+      Parsons Routes · Works best on Chrome/Edge · Install via browser menu (Add to Home Screen).<br>
+      Tip: Use full addresses for best Google Maps results. Lat/Lng lets Optimize work without APIs.
+    </footer>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
