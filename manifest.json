@@ -1,10 +1,10 @@
 {
-  "name": "Parsons Route Planner",
-  "short_name": "Parsons Routes",
+  "name": "Republic Route Planner",
+  "short_name": "RR Planner",
   "start_url": ".",
   "display": "standalone",
-  "background_color": "#ffffff",
-  "theme_color": "#1877F2",
+  "background_color": "#f6fbff",
+  "theme_color": "#00AEEF",
   "icons": [
     {
       "src": "icon-192.png",

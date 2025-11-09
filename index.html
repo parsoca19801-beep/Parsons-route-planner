@@ -1,24 +1,47 @@
+
 <!doctype html>
 <html lang="en">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Parsons Route Planner</title>
-  <meta name="theme-color" content="#1877F2">
+  <title>Republic Route Planner</title>
+  <meta name="theme-color" content="#00AEEF">
   <link rel="manifest" href="manifest.json">
   <link rel="icon" href="icon-192.png">
   <link rel="stylesheet" href="style.css">
-  <meta name="description" content="Lightweight, installable route planner with manual stop control, quick optimization, and Google Maps export.">
+  <meta name="description" content="Installable route planner for commercial and roll-off routes with dump stops, CSV/Excel paste import, optimization, and printable sheets.">
 </head>
 <body>
   <div class="container">
     <div class="card">
       <div class="h">
-        <h1>Parsons Route Planner <span class="badge">PWA</span></h1>
-        <div class="small">
-          Offline-ready · Install from your browser menu
+        <h1>Republic Route Planner <span class="badge">Light Blue</span></h1>
+        <div class="small">Install via browser menu · Offline-ready · Local autosave</div>
+      </div>
+
+      <div class="help">
+        <strong>Import from Route Sheet or Excel:</strong> Download the CSV template, fill it in (or paste rows directly from Excel). Supported headers: 
+        <code>type</code>, <code>name</code>, <code>address</code>, <code>lat</code>, <code>lng</code>, <code>serviceSeconds</code> or <code>serviceMin</code>, <code>notes</code>. 
+        Types: <em>commercial</em>, <em>rolloff</em>, <em>dump</em>.
+      </div>
+
+      <div class="row" style="margin-top:12px;">
+        <button id="downloadTemplate" class="ghost">Download CSV template</button>
+        <button id="downloadCSV" class="">Export current route (CSV)</button>
+        <input id="uploadCSV" type="file" accept=".csv,.tsv,text/csv,text/tab-separated-values" />
+      </div>
+
+      <div class="row" style="margin-top:8px;">
+        <div class="col">
+          <label>Paste from Excel (Ctrl+V). First row should be headers.</label>
+          <textarea id="pasteArea" placeholder="type,name,address,lat,lng,serviceSeconds,notes"></textarea>
+          <div class="row" style="margin-top:8px;">
+            <button id="importPaste" class="primary">Import pasted rows</button>
+          </div>
         </div>
       </div>
+
+      <hr>
 
       <div class="row">
         <div class="col">
@@ -26,11 +49,12 @@
           <select id="type">
             <option value="commercial">Commercial (30–60s)</option>
             <option value="rolloff">Roll-off (5–10m)</option>
+            <option value="dump">Dump Stop (DS)</option>
           </select>
         </div>
         <div class="col">
           <label>Stop name (or full address)</label>
-          <input id="name" placeholder="e.g., 123 Main St or Dairy Queen">
+          <input id="name" placeholder="e.g., 123 Main St or ACME Store #12">
         </div>
         <div class="col">
           <label>Optional address (improves Maps export)</label>
@@ -56,7 +80,17 @@
             <div class="col">
               <input id="svcMin" placeholder="Roll-off minutes (e.g., 7)">
             </div>
+            <div class="col">
+              <input id="svcDumpMin" placeholder="Dump minutes (e.g., 10)">
+            </div>
           </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col">
+          <label>Notes</label>
+          <input id="notes" placeholder="Gate code, swap container, contact, etc.">
         </div>
       </div>
 
@@ -65,6 +99,7 @@
         <button id="opt">Optimize (Nearest Neighbor)</button>
         <button id="gmap">Open in Google Maps</button>
         <button id="loc" class="ghost">Use my location</button>
+        <button onclick="openPrintSheet()" class="ghost">Print route sheet</button>
       </div>
 
       <hr>
@@ -74,10 +109,18 @@
           <div class="small">Route summary</div>
           <div class="list">
             <div>Total stops: <strong id="totalCount">0</strong></div>
-            <div>Est. drive time @ 30 km/h: <strong id="estDrive">0</strong></div>
-            <div>Est. service time: <strong id="totalSvc">0</strong></div>
+            <div>Est. drive @ 30 km/h: <strong id="estDrive">0</strong></div>
+            <div>Est. service: <strong id="totalSvc">0</strong></div>
             <div>Est. distance: <strong id="estDistance">0 km</strong></div>
             <div>Total day: <strong id="estTotal">0</strong></div>
+          </div>
+        </div>
+        <div class="col">
+          <div class="small">By type</div>
+          <div class="list">
+            <div>Commercial: <strong id="countCommercial">0</strong></div>
+            <div>Roll-off: <strong id="countRolloff">0</strong></div>
+            <div>Dump stops: <strong id="countDump">0</strong></div>
           </div>
         </div>
         <div class="col">
@@ -92,8 +135,12 @@
               <input id="rolloffMin" value="7">
             </div>
             <div class="col">
+              <label>Dump minutes</label>
+              <input id="dumpMin" value="10">
+            </div>
+            <div class="col">
               <label>Start name</label>
-              <input id="startName" value="Start (My Location)">
+              <input id="startName" value="Start (Yard)">
             </div>
           </div>
           <div class="row" style="margin-top:8px;">
@@ -110,11 +157,10 @@
     </div>
 
     <footer>
-      Parsons Routes · Works best on Chrome/Edge · Install via browser menu (Add to Home Screen).<br>
-      Tip: Use full addresses for best Google Maps results. Lat/Lng lets Optimize work without APIs.
+      RR Planner · Install via browser menu (Add to Home Screen).<br>
+      Tip: You can paste directly from Excel—no add-ons needed. For .xlsx files, just Save As CSV first.
     </footer>
   </div>
-
   <script src="app.js"></script>
 </body>
 </html>
